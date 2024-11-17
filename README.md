@@ -16,7 +16,7 @@ Test coverage of RESTful API application with automation framework and integrati
 - Playwright Python + Pytest is used to cover this app 
 - Test process is dockerized and a part of main app docker compose build
 - All test cases are covered
-- 1 fail test regarding app issue (To be discussed)
+- 1 fail test regarding app issue (To be discussed) 
 
 
 
