@@ -19,7 +19,6 @@ Test coverage of RESTful API application with automation framework and integrati
 - 1 fail test regarding app issue (To be discussed) 
 
 
-
 # Welcome to EarnIn Airline.
 
 This is RESTful API for EarnIn Airline application. 
