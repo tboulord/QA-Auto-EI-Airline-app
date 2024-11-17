@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start services
+        run: |
+          docker-compose build
+          docker-compose up -d postgres passport_api airline_api_dev
+          # Wait for services to be ready
+          sleep 10
+
+      - name: Fix line endings in container
+        run: docker-compose exec -T postgres dos2unix /home/scripts/exec_sql.sh
+        
+      - name: Apply database schema
+        run: |
+          docker-compose exec -T postgres chmod +x /home/scripts/exec_sql.sh
+          docker-compose exec -T postgres /home/scripts/exec_sql.sh schema.sql
+
+      - name: Run Tests
+        run: docker-compose run tests
+        continue-on-error: true
+
+      - name: Stop services
+        run: docker-compose down
+
+      - name: Archive Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: tests/reports/test_report.html
+      - name: Upload JUnit Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: junit-report
+          path: tests/reports/junit_report.xml
+  
+      - name: Install xmlstarlet
+        run: sudo apt-get install -y xmlstarlet
+  
+      - name: Parse JUnit Report
+        id: parse_junit
+        run: |
+          REPORT_FILE=tests/reports/junit_report.xml
+
+          if [ ! -f "$REPORT_FILE" ]; then
+            echo "test_details=❌ No JUnit report found" >> $GITHUB_OUTPUT
+          else
+            # Extract test details from JUnit XML
+            DETAILS=$(xmlstarlet sel -t \
+              -m '/testsuites/testsuite/testcase' \
+              -v 'concat("- ", @classname, ".", @name, ": ", ./properties/property[@name="status"]/@value, " (Time: ", @time, "s)")' \
+              -n "$REPORT_FILE")
+
+            # Add emojis based on status
+            FORMATTED_DETAILS=$(echo "$DETAILS" | sed \
+              -e 's/PASSED/✅ PASSED/' \
+              -e 's/FAILED/❌ FAILED/' \
+              -e 's/SKIPPED/⚠️ SKIPPED/')
+
+            # Create Markdown format
+            echo "test_details<<EOF" >> $GITHUB_OUTPUT
+            echo "### 🧪 Test Results" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT  # Add explicit blank line
+            echo "$FORMATTED_DETAILS" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+        shell: /usr/bin/bash -e {0}
+
+      - name: Create or Update PR Comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## 🧪 Test Results
+
+            ${{ steps.parse_junit.outputs.test_details }}

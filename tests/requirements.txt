@@ -1,0 +1,6 @@
+playwright
+pytest
+pytest-asyncio
+tzdata
+helpers
+pytest-html

@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: airline
+    volumes:
+      - ./db:/home/scripts
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+    command: >
+      sh -c "apt-get update && apt-get install -y dos2unix &&
+             dos2unix /home/scripts/exec_sql.sh &&
+             docker-entrypoint.sh postgres"
+
+  passport_api:
+    image: wiremock/wiremock:3.9.1
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./passport_api:/home/wiremock
+    networks:
+      - app_network
+
+  airline_api_dev:
+    build: .
+    ports: 
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/airline
+      - PASSPORT_API=http://passport_api:8080
+    depends_on:
+      - postgres
+      - passport_api
+    networks:
+      - app_network
+
+  tests:
+    build:
+      context: .
+      dockerfile: ./tests/Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/airline
+      - PASSPORT_API=http://passport_api:8080
+    depends_on:
+      - airline_api_dev
+      - passport_api
+    networks:
+      - app_network
+    command: >
+      sh -c "pytest --junitxml=reports/junit_report.xml --html=reports/test_report.html --self-contained-html"
+
+networks:
+  app_network:
+    driver: bridge
