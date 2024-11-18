@@ -17,7 +17,7 @@ Test coverage of RESTful API application with automation framework and integrati
 - Test project have it's own Dockerfile and is a part of main app docker compose sequence
 - All test cases are covered
 - 1 fail test regarding app issue (To be discussed)
-- Postman collection is available in test/datas/
+- Postman collection is available in test/postman_collection/
 
 
 # Welcome to EarnIn Airline.
