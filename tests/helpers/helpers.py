@@ -40,7 +40,9 @@ async def setup_wiremock_stub(wiremock_admin_context: APIRequestContext, passpor
     assert response.status == 201, f"WireMock stub setup failed: {response_text}"
 
 
+
 async def create_passenger(api_request_context: APIRequestContext, wiremock_admin_context: APIRequestContext, passport_id, first_name, last_name, flight_id="AAA01"):
+
     """
     Create a customer and add them to a flight's passengers list.
 
@@ -62,7 +64,9 @@ async def create_passenger(api_request_context: APIRequestContext, wiremock_admi
     return customer_id
 
 
+
 async def delete_passenger(api_request_context: APIRequestContext, customer_id, flight_id="AAA01"):
+
     """
     Delete a customer from a flight's passengers list.
 
@@ -76,6 +80,7 @@ async def delete_passenger(api_request_context: APIRequestContext, customer_id, 
     json_response = json.loads(response_text)
     passengers = json_response.get("passengers", [])
     assert all(p["customer_id"] != customer_id for p in passengers), f"Customer ID {customer_id} still found in passengers list"
+
 
 
 def get_flight_by_id(flights, flight_id):
@@ -127,3 +132,4 @@ def verify_passenger_in_list(passengers, customer_id):
     
     """
     return any(p["customer_id"] == customer_id for p in passengers)
+

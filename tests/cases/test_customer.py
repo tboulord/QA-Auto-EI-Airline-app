@@ -3,7 +3,9 @@ from playwright.async_api import APIRequestContext
 import json
 import logging
 
+
 from ..helpers.helpers import create_passenger, delete_passenger, setup_wiremock_stub, get_test_customer
+
 
 
 @pytest.mark.asyncio
@@ -15,6 +17,7 @@ async def test_update_customer_information(
     """
     Test Scenario:
     Update the information of an existing customer and validate that the changes are correctly applied.
+
     """
     
     customer_data = get_test_customer(test_data["customers"])
@@ -50,6 +53,7 @@ async def test_update_customer_information(
         }
 
         # Send update request
+
         response = await api_request_context.put(
             f"/flights/{flight_id}/passengers/{customer_id}",
             data=json.dumps(updated_data),
@@ -57,12 +61,14 @@ async def test_update_customer_information(
         )
         assert response.status == 200
 
+
         # Verify response
         json_response = await response.json()
         assert json_response["first_name"] == updated_first_name
 
     finally:
         await delete_passenger(api_request_context, customer_id, flight_id)
+
 
 
 @pytest.mark.asyncio
@@ -75,6 +81,7 @@ async def test_update_customer_with_mismatched_details(
     Test Scenario:
     Attempt to update a customer's information with details that do not match the Passport API, 
     and verify that the update is rejected.
+
     """
     # Get test customer data
     customer_data = get_test_customer(test_data["customers"])
@@ -110,6 +117,7 @@ async def test_update_customer_with_mismatched_details(
             "last_name": last_name
         }
 
+
         response = await api_request_context.put(
             f"/flights/{flight_id}/passengers/{customer_id}",
             data=json.dumps(updated_data),
@@ -121,5 +129,7 @@ async def test_update_customer_with_mismatched_details(
         expected_error = "Firstname or Lastname is mismatch."
         assert json_response["detail"] == expected_error
 
+
     finally:
         await delete_passenger(api_request_context, customer_id, flight_id)
+
