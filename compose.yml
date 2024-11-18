@@ -53,7 +53,7 @@ services:
     networks:
       - app_network
     command: >
-      sh -c "pytest --junitxml=reports/junit_report.xml --html=reports/test_report.html --self-contained-html"
+      sh -c "pytest tests/cases --junitxml=tests/reports/junit_report.xml --html=tests/reports/test_report.html --self-contained-html"
 
 networks:
   app_network:
