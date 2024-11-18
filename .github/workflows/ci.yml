@@ -76,7 +76,6 @@ jobs:
 
             # Create Markdown format
             echo "test_details<<EOF" >> $GITHUB_OUTPUT
-            echo "### 🧪 Test Results" >> $GITHUB_OUTPUT
             echo "" >> $GITHUB_OUTPUT  # Add explicit blank line
             echo "$FORMATTED_DETAILS" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT

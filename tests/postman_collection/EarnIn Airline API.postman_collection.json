@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "93ea7964-a466-4e7e-b06a-8122d9c1afc2",
+		"name": "EarnIn Airline API",
+		"description": "Postman collection for all API transactions in the EarnIn Airline app.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12962556",
+		"_collection_link": "https://martian-zodiac-742334.postman.co/workspace/test~483bf070-83dc-4c08-bf37-3b8f1ee16d4c/collection/12962556-93ea7964-a466-4e7e-b06a-8122d9c1afc2?action=share&source=collection_link&creator=12962556"
+	},
+	"item": [
+		{
+			"name": "Flights",
+			"item": [
+				{
+					"name": "List All Flights",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/flights",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"flights"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Passengers",
+			"item": [
+				{
+					"name": "List Passengers for a Flight",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/flights/{{flight_id}}/passengers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"flights",
+								"{{flight_id}}",
+								"passengers"
+							]
+						},
+						"description": "Replace `{{flight_id}}` with the flight ID to retrieve passenger details for that flight."
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Passenger",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"passport_id\": \"BC1500\",\n  \"first_name\": \"Shauna\",\n  \"last_name\": \"Davila\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/flights/{{flight_id}}/passengers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"flights",
+								"{{flight_id}}",
+								"passengers"
+							]
+						},
+						"description": "Replace `{{flight_id}}` with the flight ID to create a passenger."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Passenger Details",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"passport_id\": \"BC1500\",\n  \"first_name\": \"Shauna\",\n  \"last_name\": \"Test\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/flights/{{flight_id}}/passengers/{{customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"flights",
+								"{{flight_id}}",
+								"passengers",
+								"{{customer_id}}"
+							]
+						},
+						"description": "Replace `{{flight_id}}` with the flight ID and `{{customer_id}}` with the passenger's customer ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Passenger",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/flights/{{flight_id}}/passengers/{{customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"flights",
+								"{{flight_id}}",
+								"passengers",
+								"{{customer_id}}"
+							]
+						},
+						"description": "Replace `{{flight_id}}` with the flight ID and `{{customer_id}}` with the passenger's customer ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Passport API (Mock)",
+			"item": [
+				{
+					"name": "Retrieve Passport Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/passport/{{passport_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"passport",
+								"{{passport_id}}"
+							]
+						},
+						"description": "Replace `{{passport_id}}` with the passport ID to retrieve details from the mock Passport API."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

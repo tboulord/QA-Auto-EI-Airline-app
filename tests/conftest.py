@@ -58,14 +58,12 @@ async def playwright_instance() -> Playwright:
         yield playwright
 
 
-@pytest_asyncio.fixture(scope='session')
+@pytest_asyncio.fixture(scope='function')
 async def api_request_context(playwright_instance: Playwright) -> APIRequestContext:
-    """
-    Provides an APIRequestContext for the Airline API.
-
-    """
+    logger.debug("Initializing API request context...")
     request_context = await playwright_instance.request.new_context(base_url="http://airline_api_dev:8000")
     yield request_context
+    logger.debug("Disposing API request context...")
     await request_context.dispose()
 
 
@@ -96,9 +94,8 @@ def test_data():
     Loads and provides test data from a JSON file.
 
     """
-    data_file = os.path.join(os.path.dirname(__file__), 'datas', 'test_data.json')
-    logger.debug(f"Loading test data from {data_file}")
+    data_file = os.path.join(os.path.dirname(__file__), './datas/test_data.json')
+    data_file = os.path.abspath(data_file)
     with open(data_file) as f:
         data = json.load(f)
-    logger.debug(f"Test data loaded: {data}")
     return data

@@ -3,7 +3,7 @@ from playwright.async_api import APIRequestContext
 import json
 import logging
 
-from helpers import create_customer, delete_customer, setup_wiremock_stub
+from ..helpers.helpers import create_customer, delete_customer, setup_wiremock_stub
 
 
 @pytest.mark.asyncio

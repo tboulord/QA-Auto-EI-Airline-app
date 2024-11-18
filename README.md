@@ -6,18 +6,18 @@
 Test coverage of RESTful API application with automation framework and integration on Github Action CI
 
 #### How to run Tests
-- Clone project
-- Checkout and push on develop branch (A pull request is already in progress from develop)
-- The job will trigger both app and test docker build on each PR
+- Fork this project
+- Create a pull request from develop to master branch to trigger the test job
+- The job will start both app and test docker build
 - **HTML Pytest artifact can be download from Github Actions build**
 - **Auto comment is posted on pull request based on Junit report**
 
 #### Key notes
 - Playwright Python + Pytest is used to cover this app 
-- Test process is dockerized and a part of main app docker compose build
+- Test project have it's own Dockerfile and is a part of main app docker compose sequence
 - All test cases are covered
 - 1 fail test regarding app issue (To be discussed)
-- Postman collection is available in test/datas/
+- Postman collection is available in test/postman_collection/
 
 
 # Welcome to EarnIn Airline.
