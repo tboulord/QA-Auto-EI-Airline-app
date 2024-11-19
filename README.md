@@ -7,7 +7,7 @@ Test coverage of RESTful API application with automation framework and integrati
 
 #### How to run Tests
 - Fork this project
-- Create a pull request from develop to master branch to trigger the test job
+- Create a pull request from develop to master branch to run the test job
 - The job will start both app and test docker build
 - **HTML Pytest artifact can be download from Github Actions build**
 - **Auto comment is posted on pull request based on Junit report**
